@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width,height=device-height, initial-scale=1.0">
+	<title>履修仮組みツール</title>
+	<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+	<div class="contents">
+		<div class="main">
+			<div class="header">
+				<h1>履修仮組みツール</h1>
+				<!-- ハンバーガーメニューボタン -->
+				<input type="button" class="menu" value="≡">
+			</div>
+			<div class="changer">
+				<!-- 前期後期カレンダーを切り替えるボタン -->
+				<div class="button">
+					<input type="button" value="前期" name="before">
+					<input type="button" value="後期" name="after">
+				</div>
+				<!-- 学年を切り替えるボタン -->
+				<div class="grade_input">
+					<label>学年：</label>
+					<input type="number" id="grade_text" value="1" min="1" max="4" onWheel="{(e) => e.target.blur()}" />
+				</div>
+			</div>
+			<div class="calendar">
+				<!-- 前期カレンダー -->
+				<div id="semester_bf">
+					<table>
+						<!-- 見出し -->
+						<tr>
+							<th style="color: blue;">前期</th>
+							<th>月曜日</th>
+							<th>火曜日</th>
+							<th>水曜日</th>
+							<th>木曜日</th>
+							<th>金曜日</th>
+							<th>土曜日</th>
+						</tr>
+						<!-- 科目(セレクトボックス)と単位数 -->
+						<tr class="subject">
+							<th rowspan="2">1</th>
+							<td><select name="mon" id="bf_mon1" value="1">
+									<option value="default" style="text-align:center;">― ― ― ― ― ―</option>
+								</select></td>
+							<td><select name="tue" id="bf_tue1" value="1">
+									<option value="default" style="text-align:center;">― ― ― ― ― ―</option>
+								</select></td>
+							<td><select name="wed" id="bf_wed1" value="1">
+									<option value="default" style="text-align:center;">― ― ― ― ― ―</option>
+								</select></td>
+							<td><select name="thr" id="bf_thr1" value="1">
+									<option value="default" style="text-align:center;">― ― ― ― ― ―</option>
+								</select></td>
+							<td><select name="fri" id="bf_fri1" value="1">
+									<option value="default" style="text-align:center;">― ― ― ― ― ―</option>
+								</select></td>
+							<td><select name="sat" id="bf_sat1" value="1">
+									<option value="default" style="text-align:center;">― ― ― ― ― ―</option>
+								</select></td>
+						</tr>
+						<tr class="credit">
+							<td id="bf_mon_c1" name="mon">0</td>
+							<td id="bf_tue_c1" name="tue">0</td>
+							<td id="bf_wed_c1" name="wed">0</td>
+							<td id="bf_thr_c1" name="thr">0</td>
+							<td id="bf_fri_c1" name="fri">0</td>
+							<td id="bf_sat_c1" name="sat">0</td>
+						</tr>
+						<tr class="subject">
+							<th rowspan="2">2</th>
+							<td><select name="mon" id="bf_mon2" value="2">
+									<option value="default" style="text-align:center;">― ― ― ― ― ―</option>
+								</select></td>
+							<td><select name="tue" id="bf_tue2" value="2">
+									<option value="default" style="text-align:center;">― ― ― ― ― ―</option>
+								</select></td>
+							<td><select name="wed" id="bf_wed2" value="2">
+									<option value="default" style="text-align:center;">― ― ― ― ― ―</option>
+								</select></td>
+							<td><select name="thr" id="bf_thr2" value="2">
+									<option value="default" style="text-align:center;">― ― ― ― ― ―</option>
+								</select></td>
+							<td><select name="fri" id="bf_fri2" value="2">
+									<option value="default" style="text-align:center;">― ― ― ― ― ―</option>
+								</select></td>
+							<td><select name="sat" id="bf_sat2" value="2">
+									<option value="default" style="text-align:center;">― ― ― ― ― ―</option>
+								</select></td>
+						</tr>
+						<tr class="credit">
+							<td id="bf_mon_c2" name="mon">0</td>
+							<td id="bf_tue_c2" name="tue">0</td>
+							<td id="bf_wed_c2" name="wed">0</td>
+							<td id="bf_thr_c2" name="thr">0</td>
+							<td id="bf_fri_c2" name="fri">0</td>
+							<td id="bf_sat_c2" name="sat">0</td>
+						</tr>
+						<tr class="subject">
+							<th rowspan="2">3</th>
+							<td><select name="mon" id="bf_mon3" value="3">
+									<option value="default" style="text-align:center;">― ― ― ― ― ―</option>
+								</select></td>
+							<td><select name="tue" id="bf_tue3" value="3">
+									<option value="default" style="text-align:center;">― ― ― ― ― ―</option>
+								</select></td>
+							<td><select name="wed" id="bf_wed3" value="3">
+									<option value="default" style="text-align:center;">― ― ― ― ― ―</option>
+								</select></td>
+							<td><select name="thr" id="bf_thr3" value="3">
+									<option value="default" style="text-align:center;">― ― ― ― ― ―</option>
+								</select></td>
+							<td><select name="fri" id="bf_fri3" value="3">
+									<option value="default" style="text-align:center;">― ― ― ― ― ―</option>
+								</select></td>
+							<td><select name="sat" id="bf_sat3" value="3">
+									<option value="default" style="text-align:center;">― ― ― ― ― ―</option>
+								</select></td>
+						</tr>
+						<tr class="credit">
+							<td id="bf_mon_c3" name="mon">0</td>
+							<td id="bf_tue_c3" name="tue">0</td>
+							<td id="bf_wed_c3" name="wed">0</td>
+							<td id="bf_thr_c3" name="thr">0</td>
+							<td id="bf_fri_c3" name="fri">0</td>
+							<td id="bf_sat_c3" name="sat">0</td>
+						</tr>
+						<tr class="subject">
+							<th rowspan="2">4</th>
+							<td><select name="mon" id="bf_mon4" value="4">
+									<option value="default" style="text-align:center;">― ― ― ― ― ―</option>
+								</select></td>
+							<td><select name="tue" id="bf_tue4" value="4">
+									<option value="default" style="text-align:center;">― ― ― ― ― ―</option>
+								</select></td>
+							<td><select name="wed" id="bf_wed4" value="4">
+									<option value="default" style="text-align:center;">― ― ― ― ― ―</option>
+								</select></td>
+							<td><select name="thr" id="bf_thr4" value="4">
+									<option value="default" style="text-align:center;">― ― ― ― ― ―</option>
+								</select></td>
+							<td><select name="fri" id="bf_fri4" value="4">
+									<option value="default" style="text-align:center;">― ― ― ― ― ―</option>
+								</select></td>
+							<td><select name="sat" id="bf_sat4" value="4">
+									<option value="default" style="text-align:center;">― ― ― ― ― ―</option>
+								</select></td>
+						</tr>
+						<tr class="credit">
+							<td id="bf_mon_c4" name="mon">0</td>
+							<td id="bf_tue_c4" name="tue">0</td>
+							<td id="bf_wed_c4" name="wed">0</td>
+							<td id="bf_thr_c4" name="thr">0</td>
+							<td id="bf_fri_c4" name="fri">0</td>
+							<td id="bf_sat_c4" name="sat">0</td>
+						</tr>
+						<tr class="subject">
+							<th rowspan="2">5</th>
+							<td><select name="mon" id="bf_mon5" value="5">
+									<option value="default" style="text-align:center;">― ― ― ― ― ―</option>
+								</select></td>
+							<td><select name="tue" id="bf_tue5" value="5">
+									<option value="default" style="text-align:center;">― ― ― ― ― ―</option>
+								</select></td>
+							<td><select name="wed" id="bf_wed5" value="5">
+									<option value="default" style="text-align:center;">― ― ― ― ― ―</option>
+								</select></td>
+							<td><select name="thr" id="bf_thr5" value="5">
+									<option value="default" style="text-align:center;">― ― ― ― ― ―</option>
+								</select></td>
+							<td><select name="fri" id="bf_fri5" value="5">
+									<option value="default" style="text-align:center;">― ― ― ― ― ―</option>
+								</select></td>
+							<td><select name="sat" id="bf_sat5" value="5">
+									<option value="default" style="text-align:center;">― ― ― ― ― ―</option>
+								</select></td>
+						</tr>
+						<tr class="credit">
+							<td id="bf_mon_c5" name="mon">0</td>
+							<td id="bf_tue_c5" name="tue">0</td>
+							<td id="bf_wed_c5" name="wed">0</td>
+							<td id="bf_thr_c5" name="thr">0</td>
+							<td id="bf_fri_c5" name="fri">0</td>
+							<td id="bf_sat_c5" name="sat">0</td>
+						</tr>
+						<!-- 単位合計 -->
+						<tr class="sum_sem">
+							<th>合計</th>
+							<td colspan="6" id="sum_bf" class="sum_sem">0</td>
+						</tr>
+					</table>
+				</div>
+		
+				<!-- 後期カレンダー -->
+				<div id="semester_af">
+					<table>
+						<!-- 見出し -->
+						<tr>
+							<th style="color: blue;">後期</th>
+							<th>月曜日</th>
+							<th>火曜日</th>
+							<th>水曜日</th>
+							<th>木曜日</th>
+							<th>金曜日</th>
+							<th>土曜日</th>
+						</tr>
+						<!-- 科目(セレクトボックス)と単位数 -->
+						<tr class="subject">
+							<th rowspan="2">1</th>
+							<td><select name="mon" id="af_mon1" value="1">
+									<option value="default" style="text-align:center;">― ― ― ― ― ―</option>
+								</select></td>
+							<td><select name="tue" id="af_tue1" value="1">
+									<option value="default" style="text-align:center;">― ― ― ― ― ―</option>
+								</select></td>
+							<td><select name="wed" id="af_wed1" value="1">
+									<option value="default" style="text-align:center;">― ― ― ― ― ―</option>
+								</select></td>
+							<td><select name="thr" id="af_thr1" value="1">
+									<option value="default" style="text-align:center;">― ― ― ― ― ―</option>
+								</select></td>
+							<td><select name="fri" id="af_fri1" value="1">
+									<option value="default" style="text-align:center;">― ― ― ― ― ―</option>
+								</select></td>
+							<td><select name="sat" id="af_sat1" value="1">
+									<option value="default" style="text-align:center;">― ― ― ― ― ―</option>
+								</select></td>
+						</tr>
+						<tr class="credit">
+							<td id="af_mon_c1" name="mon">0</td>
+							<td id="af_tue_c1" name="tue">0</td>
+							<td id="af_wed_c1" name="wed">0</td>
+							<td id="af_thr_c1" name="thr">0</td>
+							<td id="af_fri_c1" name="fri">0</td>
+							<td id="af_sat_c1" name="sat">0</td>
+						</tr>
+						<tr class="subject">
+							<th rowspan="2">2</th>
+							<td><select name="mon" id="af_mon2" value="2">
+									<option value="default" style="text-align:center;">― ― ― ― ― ―</option>
+								</select></td>
+							<td><select name="tue" id="af_tue2" value="2">
+									<option value="default" style="text-align:center;">― ― ― ― ― ―</option>
+								</select></td>
+							<td><select name="wed" id="af_wed2" value="2">
+									<option value="default" style="text-align:center;">― ― ― ― ― ―</option>
+								</select></td>
+							<td><select name="thr" id="af_thr2" value="2">
+									<option value="default" style="text-align:center;">― ― ― ― ― ―</option>
+								</select></td>
+							<td><select name="fri" id="af_fri2" value="2">
+									<option value="default" style="text-align:center;">― ― ― ― ― ―</option>
+								</select></td>
+							<td><select name="sat" id="af_sat2" value="2">
+									<option value="default" style="text-align:center;">― ― ― ― ― ―</option>
+								</select></td>
+						</tr>
+						<tr class="credit">
+							<td id="af_mon_c2" name="mon">0</td>
+							<td id="af_tue_c2" name="tue">0</td>
+							<td id="af_wed_c2" name="wed">0</td>
+							<td id="af_thr_c2" name="thr">0</td>
+							<td id="af_fri_c2" name="fri">0</td>
+							<td id="af_sat_c2" name="sat">0</td>
+						</tr>
+						<tr class="subject">
+							<th rowspan="2">3</th>
+							<td><select name="mon" id="af_mon3" value="3">
+									<option value="default" style="text-align:center;">― ― ― ― ― ―</option>
+								</select></td>
+							<td><select name="tue" id="af_tue3" value="3">
+									<option value="default" style="text-align:center;">― ― ― ― ― ―</option>
+								</select></td>
+							<td><select name="wed" id="af_wed3" value="3">
+									<option value="default" style="text-align:center;">― ― ― ― ― ―</option>
+								</select></td>
+							<td><select name="thr" id="af_thr3" value="3">
+									<option value="default" style="text-align:center;">― ― ― ― ― ―</option>
+								</select></td>
+							<td><select name="fri" id="af_fri3" value="3">
+									<option value="default" style="text-align:center;">― ― ― ― ― ―</option>
+								</select></td>
+							<td><select name="sat" id="af_sat3" value="3">
+									<option value="default" style="text-align:center;">― ― ― ― ― ―</option>
+								</select></td>
+						</tr>
+						<tr class="credit">
+							<td id="af_mon_c3" name="mon">0</td>
+							<td id="af_tue_c3" name="tue">0</td>
+							<td id="af_wed_c3" name="wed">0</td>
+							<td id="af_thr_c3" name="thr">0</td>
+							<td id="af_fri_c3" name="fri">0</td>
+							<td id="af_sat_c3" name="sat">0</td>
+						</tr>
+						<tr class="subject">
+							<th rowspan="2">4</th>
+							<td><select name="mon" id="af_mon4" value="4">
+									<option value="default" style="text-align:center;">― ― ― ― ― ―</option>
+								</select></td>
+							<td><select name="tue" id="af_tue4" value="4">
+									<option value="default" style="text-align:center;">― ― ― ― ― ―</option>
+								</select></td>
+							<td><select name="wed" id="af_wed4" value="4">
+									<option value="default" style="text-align:center;">― ― ― ― ― ―</option>
+								</select></td>
+							<td><select name="thr" id="af_thr4" value="4">
+									<option value="default" style="text-align:center;">― ― ― ― ― ―</option>
+								</select></td>
+							<td><select name="fri" id="af_fri4" value="4">
+									<option value="default" style="text-align:center;">― ― ― ― ― ―</option>
+								</select></td>
+							<td><select name="sat" id="af_sat4" value="4">
+									<option value="default" style="text-align:center;">― ― ― ― ― ―</option>
+								</select></td>
+						</tr>
+						<tr class="credit">
+							<td id="af_mon_c4" name="mon">0</td>
+							<td id="af_tue_c4" name="tue">0</td>
+							<td id="af_wed_c4" name="wed">0</td>
+							<td id="af_thr_c4" name="thr">0</td>
+							<td id="af_fri_c4" name="fri">0</td>
+							<td id="af_sat_c4" name="sat">0</td>
+						</tr>
+						<tr class="subject">
+							<th rowspan="2">5</th>
+							<td><select name="mon" id="af_mon5" value="5">
+									<option value="default" style="text-align:center;">― ― ― ― ― ―</option>
+								</select></td>
+							<td><select name="tue" id="af_tue5" value="5">
+									<option value="default" style="text-align:center;">― ― ― ― ― ―</option>
+								</select></td>
+							<td><select name="wed" id="af_wed5" value="5">
+									<option value="default" style="text-align:center;">― ― ― ― ― ―</option>
+								</select></td>
+							<td><select name="thr" id="af_thr5" value="5">
+									<option value="default" style="text-align:center;">― ― ― ― ― ―</option>
+								</select></td>
+							<td><select name="fri" id="af_fri5" value="5">
+									<option value="default" style="text-align:center;">― ― ― ― ― ―</option>
+								</select></td>
+							<td><select name="sat" id="af_sat5" value="5">
+									<option value="default" style="text-align:center;">― ― ― ― ― ―</option>
+								</select></td>
+						</tr>
+						<tr class="credit">
+							<td id="af_mon_c5" name="mon">0</td>
+							<td id="af_tue_c5" name="tue">0</td>
+							<td id="af_wed_c5" name="wed">0</td>
+							<td id="af_thr_c5" name="thr">0</td>
+							<td id="af_fri_c5" name="fri">0</td>
+							<td id="af_sat_c5" name="sat">0</td>
+						</tr>
+						<!-- 後期単位合計 -->
+						<tr class="sum_sem">
+							<th>合計</th>
+							<td colspan="6" id="sum_af" class="sum_sem">0</td>
+						</tr>
+					</table>
+				</div>
+			</div>
+		</div>
+		<div class="navigates">
+			<div class="nav_head">
+				<div class="camera">
+					<!-- スクショボタン -->
+					<label>スクショボタン</label>
+					<input type="button" value="📸" id="screenshot">
+				</div>
+				<input type="button" class="menu menu2" value="≡">
+			</div>
+			<!-- 使い方の説明 -->
+			<div class="intro">
+				<h3>[使い方]</h3>
+				1. 右上の"学年"タブを変更すると<br>&emsp;学年に応じた選択肢がカレンダーに追加されます<br>
+				2. カレンダーから履修したい科目を選択すれば<br>&emsp;それに応じた単位数が表示されます<br>
+				3. 赤い選択肢は必修（選んだら文字色も赤になる）<br>
+				4. 選択したときの背景色はコースの色<br>
+				<h3>[色の説明]</h3>
+				<div class="color">
+					<span style='color: rgba(220,30,60,0.9)'>■必修</span><br>
+					<span style='color: rgba(200,100,60,1);'>■社会情報コース</span><br>
+					<span style='color: rgba(80,210,255,1);'>■知能情報コース</span><br>
+					<span style='color: rgba(230,230,20,1);'>■科目数過少</span><br>
+					<span style='color: rgba(0,200,50,1);'>■科目数ぴったり</span><br>
+					<span style='color: rgb(218, 118, 255);'>■科目数オーバー</span><br>
+				</div>
+			</div>
+			<!-- 領域科目単位 -->
+			<div class="area_sub">
+				<table>
+					<tr>
+						<th id="km">共マネ</th>
+						<th id="sk">専門教育</th>
+					</tr>
+					<tr>
+						<td id="kk">工学基礎：<span class="ryouiki">0</span></td>
+						<td id="ks">基礎専門：<span class="ryouiki">0</span></td>
+					</tr>
+					<tr>
+						<td id="tm">地域マネ：<span class="ryouiki">0</span></td>
+						<td id="se">専　　門：<span class="ryouiki">0</span></td>
+		
+					</tr>
+					<tr>
+						<td id="go">語　　学：<span class="ryouiki">0</span></td>
+						<td id="ka">関連専門：<span class="ryouiki">0</span></td>
+					</tr>
+					<tr>
+						<td id="ip">一　　般：<span class="ryouiki">0</span></td>
+					</tr>
+				</table>
+			</div>
+			<!-- tooltip -->
+			<div class="tooltip">
+				<p></p>
+			</div>
+			<!-- 通年合計 -->
+			<div class="sum_all">
+				<label style="font-weight: bold;">合計：</label>
+				<div id="sum_all_div"><span id="sum_all_span">0</span>/49</div>
+			</div>
+		</div>
+	</div>
+	<script src="js/data/subjects_data.js"></script>
+	<script src="js/values.js"></script>
+	<script src="js/table.js"></script>
+	<script src="js/change_grade.js"></script>
+	<script src="js/select_subject.js"></script>
+	<script src="js/calc.js"></script>
+	<script src="js/library/html2canvas.min.js"></script>
+</body>
+</html>

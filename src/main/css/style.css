@@ -296,8 +296,8 @@ div.calendar td select {
 }
 
 div.calendar td select option {
-	color: cornsilk;
-	background-color: rgba(80, 20, 255, 0.9);
+	color: #464646;
+	background-color: rgba(255, 248, 228, 0.9);
 	font-weight: 600;
 }
 div#semester_af{

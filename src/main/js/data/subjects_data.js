@@ -3,7 +3,6 @@
 科目データ置き場。
 各数字のキーは学年を表していて、bfは前期・afは後期
 */
-
 function getData(grade,semester){
 	const data = 
 		{
@@ -16,12 +15,12 @@ function getData(grade,semester){
 					{
 						"name": "Ｃプログラミング基礎及び演習  　【田邉　造】",
 						"day": "月",
-						"time": "1",
-						"credit": "3",
-						"compulsory": "0",
-						"course": "1",
+						"time": 1,
+						"credit": 3,
+						"compulsory": 0,
+						"course": 1,
 						"division": "ks",
-						"multi": "1"
+						"multi": 1
 					},
 					{
 						"name": "ＯＳ＆コンピュータアーキテクチャ論  　【山田　哲靖】",

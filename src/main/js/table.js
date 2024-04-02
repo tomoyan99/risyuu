@@ -76,9 +76,9 @@ window.addEventListener("DOMContentLoaded",()=>{
 			
 			// 今選択してるタームではない方を返す関数
 			function getElseTerm(nowterm) {
-				if (nowterm == before) {
+				if (nowterm === before) {
 					return after;
-				} else if (nowterm == after) {
+				} else if (nowterm === after) {
 					return before;
 				}
 			}
@@ -99,7 +99,7 @@ window.addEventListener("DOMContentLoaded",()=>{
 	});//forEach
 	//スクショ撮る
 	screenshot.addEventListener("click",()=>{;
-		createScreeenShot();
+		createScreenShot();
 	});
 
 
@@ -118,16 +118,15 @@ window.addEventListener("DOMContentLoaded",()=>{
 
 // カレンダーの作成
 function createCalendar(data, sel) {
-	if (data != []) {
+	if (data.length !== 0) {
 		//---mon～satの6回---//
 		for (const key in sel) {
 			//---st1～st5の5回---//
 			sel[key].forEach((cell1, index1) => {
 				//sel[key]は曜日列の各行。index1は[0]～[4]
 				let optArray = data.filter((data) => {
-					if (day_conv_day[data.day] == key && data.time == index1 + 1) { return data; }
+					if (day_conv_day[data.day] === key && data.time === index1 + 1) { return data; }
 				});//optArray_
-
 				//作成
 				optArray.forEach((data, index2) => {
 					createOption(cell1, data, index2 + 1);
@@ -154,11 +153,11 @@ function createOption(work_place,data,index) {
 		multi : data.multi, // 複講
 	};
 	opt.innerHTML = data.name; //本文
-	if (data.compulsory == 1) {
+	if (data.compulsory === 1) {
 		opt.style.backgroundColor = "rgba(220,30,60,0.9)";
 		opt.style.color = "#fff";
 	}
-	if (data.course != 0) {
+	if (data.course !== 0) {
 		opt.style.backgroundColor = course_color[data.course];
 		opt.style.color = "rgba(0,0,0,1)";
 	}
@@ -209,7 +208,7 @@ function setDefaultAttr() {
 	});
 }
 // スクショ作成
-function createScreeenShot() {
+function createScreenShot() {
 	const div_union = document.createElement("div");
 	const div_points = document.createElement("div");
 	const div_calendar = document.querySelector("div.calendar").cloneNode(true);
@@ -296,7 +295,7 @@ function setMenuSize() {
 
 function getVisibleTableSize() {
 	for (const table of document.querySelectorAll("div.calendar table")) {
-		if (table.clientHeight != 0) {
+		if (table.clientHeight !== 0) {
 			return table.clientHeight;
 		}
 	};

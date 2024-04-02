@@ -18,7 +18,7 @@
 	//監視処理のインスタンス化
 	const mo = new MutationObserver((record) => {
 		record.forEach((td)=>{
-			if (td.removedNodes[0] != undefined) {
+			if (td.removedNodes[0] !== undefined) {
 				
 				//---カレンダー下部の期別合計をいじる部分---//
 				sum_cre -= parseInt(td.removedNodes[0].data); //前に選択されていた分を引く
@@ -26,7 +26,7 @@
 				sum_bf.innerHTML = sum_cre; //innerHTMLを変更
 				
 				//---領域科目別の点数---//
-				if (td.target.attr != undefined && td.target.reattr != undefined) {
+				if (td.target.attr !== undefined && td.target.reattr !== undefined) {
 					//ryouiki_sumは得点計算用の配列
 					//ryouikiにそのまま数値を足して表示する方法がこれ以外分からなかった。
 					ryouiki_sum[td.target.reattr.division] -= parseInt(td.target.reattr.credit); //前に選択されていた分を引く
@@ -60,7 +60,7 @@
 	//監視処理のインスタンス化
 	const mo = new MutationObserver((record) => {
 		record.forEach((td) => {
-			if (td.removedNodes[0] != undefined) {
+			if (td.removedNodes[0] !== undefined) {
 
 				//---カレンダー下部の期別合計をいじる部分---//
 				sum_cre -= parseInt(td.removedNodes[0].data); //前に選択されていた分を引く
@@ -68,7 +68,7 @@
 				sum_af.innerHTML = sum_cre; //innerHTMLを変更
 
 				//---領域科目別の点数---//
-				if (td.target.attr != undefined && td.target.reattr != undefined) {
+				if (td.target.attr !== undefined && td.target.reattr !== undefined) {
 					//ryouiki_sumは得点計算用の配列
 					//ryouikiにそのまま数値を足して表示する方法がこれ以外分からなかった。
 					ryouiki_sum[td.target.reattr.division] -= parseInt(td.target.reattr.credit); //前に選択されていた分を引く
@@ -119,7 +119,7 @@
 	const mo = new MutationObserver(() => {
 		const credit_all = parseInt(sumAllspan.innerHTML); //通年単位合計(数値)
 	
-		if (credit_all == 0) {
+		if (credit_all === 0) {
 				styleDiv.backgroundColor = "#fff";
 				styleDiv.color = "#000";
 				tooltipP.innerHTML = "履修科目がゼロです😡";

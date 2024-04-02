@@ -39,7 +39,7 @@ function findOption(data, tr_select, day) {
 //入力はselectノード
 function isselectedTrue(e_select) {
 	let selected_option = Object.values(e_select).filter((option) => {
-		if (option.selected == true) {
+		if (option.selected === true) {
 			return option;
 		}
 	});
@@ -51,8 +51,8 @@ function findMulti(selected_option, data_sem) {
 	const soa = selected_option.attr;
 	//今選択したのとは別の時間のやつ
 	const multi_sub = data_sem.filter((data) => {
-		if (soa.name == data.name &&
-			soa.day == day_conv_day[data.day] &&
+		if (soa.name === data.name &&
+			soa.day === day_conv_day[data.day] &&
 			soa.time != data.time) {
 			return data;
 		}
@@ -70,7 +70,7 @@ function setMulti(multi_sub, ab) {
 
 		const want_to_change_opt = Object.values(want_to_change_sel).filter((opt) => {
 			//attrが存在して、attr.nameがmulti_subのnameと同じoption要素を検索（変えたいselectから）
-			if (opt.attr != undefined && opt.attr.name == multi_attr.name) {
+			if (opt.attr !== undefined && opt.attr.name === multi_attr.name) {
 				return opt;
 			}
 		})[0]; //変えたいoption要素
@@ -78,10 +78,10 @@ function setMulti(multi_sub, ab) {
 		want_to_change_opt.selected = true; //optionを設定
 
 		//reattrの設定
-		if (want_to_change_sel.attr == undefined) {
+		if (want_to_change_sel.attr === undefined) {
 			//初手複講を選択したとき
 			want_to_change_td.reattr = want_to_change_sel[0].attr;//td.reattrはdefault.attrに初期化
-		} else if (want_to_change_sel.attr != undefined) {
+		} else if (want_to_change_sel.attr !== undefined) {
 			//二回目以降、何かから何かへ複講を選択した時
 			want_to_change_td.reattr = want_to_change_sel.attr;//td.reattrは前に選択されていたoptionのattrに変更
 		}
@@ -125,8 +125,8 @@ function selectSubject(select_semester, semester) {
 			select.addEventListener("change", (target) => {
 
 				let td_credits = document.querySelectorAll("div#semester_" + semester + " tr.credit td[name=" + key + "]"); //前後期のセレクトされた曜日の全時限td_creditノード
-				let selected_opt = isselectedTrue(target.srcElement)[0]; //選択したoptionノードを取得
-				const srcSelect = target.srcElement; //select要素
+				let selected_opt = isselectedTrue(target.target)[0]; //選択したoptionノードを取得
+				const srcSelect = target.target; //select要素
 				srcSelect.style.backgroundColor = "#fff"; //背景色をデフォルト（白）に変更
 				/* 直下のtdに単位数を入力 */
 				td_credits[selected_opt.attr.time - 1].style.color = "#000"; //tdの文字色をデフォルトの黒に
@@ -138,50 +138,50 @@ function selectSubject(select_semester, semester) {
 
 				/* 複講を自動選択 */
 				//srcSelect.attrが存在しない == 初回変更の場合
-				if (srcSelect.attr == undefined) {
+				if (srcSelect.attr === undefined) {
 
 					td_credits[selected_opt.attr.time - 1].attr = JSON.parse(JSON.stringify(selected_opt.attr)); //td.attrにoptionのattrをコピー
 					td_credits[selected_opt.attr.time - 1].reattr = JSON.parse(JSON.stringify(Object.values(srcSelect)[0].attr)); //td.reattrにdefaultのattrをコピー(reattrの初期化)
 
-					if (selected_opt.attr.multi == 1) {
+					if (selected_opt.attr.multi === 1) {
 						//選択したoptionが複講だったとき
 						const multi_sub = findMulti(selected_opt, data_sem[semester]); //選択されてない時限のノードを配列で複講
 						setMulti(multi_sub, semester); //選択されてない複講をリセット
 					}
 
-				} else if (srcSelect.attr != undefined) {
+				} else if (srcSelect.attr) {
 
 					//二回目以降の選択
 					td_credits[selected_opt.attr.time - 1].attr = JSON.parse(JSON.stringify(selected_opt.attr)); //td.attrにoptionのattrをコピー
 					td_credits[selected_opt.attr.time - 1].reattr = JSON.parse(JSON.stringify(srcSelect.attr)); //td.reattrにselectのattrをコピー(reattrの初期化)
 
-					if (srcSelect.attr.multi == 1) {
+					if (srcSelect.attr.multi === 1) {
 						//前に選択されていたのが複講だったとき
 						//一回全部リセット
 						const multi_sub = findMulti(srcSelect, data_sem[semester]); //選択されてない時限の複講を探してノードを配列で返却
 						removeMulti(multi_sub, semester); //選択されてない複講をリセット
 
-						if (selected_opt.attr.multi == 1) {
+						if (selected_opt.attr.multi === 1) {
 							//今選択されたのが複講の時
 							const multi_sub = findMulti(selected_opt, data_sem[semester]); //選択されてない時限のノードを配列で複講
 							setMulti(multi_sub, semester); //選択されてない複講をリセット
-						} else if (selected_opt.attr.multi == 0) {
+						} else if (selected_opt.attr.multi === 0) {
 							//今選択されたのが単講の時
-							if (selected_opt.attr.name == "default") {
+							if (selected_opt.attr.name === "default") {
 								//defaultに戻したのなら
 								td_credits[selected_opt.attr.time - 1].style.color = "#000"; //文字色を黒に
 							}
 						}
-					} else if (srcSelect.attr.multi == 0) {
+					} else if (srcSelect.attr.multi === 0) {
 						//前に選択されていたのが単講
 
-						if (selected_opt.attr.multi == 1) {
+						if (selected_opt.attr.multi === 1) {
 							//今選択されたのが複講の時
 							const multi_sub = findMulti(selected_opt, data_sem[semester]); //選択されてない時限のノードを配列で複講
 							setMulti(multi_sub, semester); //選択されてない複講をリセット
-						} else if (selected_opt.attr.multi == 0) {
+						} else if (selected_opt.attr.multi === 0) {
 							//今選択されたのが単講の時
-							if (selected_opt.attr.name == "default") {
+							if (selected_opt.attr.name === "default") {
 								td_credits[selected_opt.attr.time - 1].style.color = "#000"; //文字色を黒に
 							}
 						}//if (selected_opt.attr.multi == 1)

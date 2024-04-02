@@ -2,6 +2,26 @@
 /* 
 科目データ置き場。
 各数字のキーは学年を表していて、bfは前期・afは後期
+値は全部stringで
+	"name":科目名,
+	"day": 曜日,
+	"time": 時限,
+	"credit": 単位数,
+	"compulsory": 必修か(0なら選択,1なら必修),
+	"course": コース選択(知能1,社会2,なし0),
+	"division": 科目領域,
+	"multi": 複講か否か(0なら単発,1なら複講)
+
+科目領域
+	km:共マネ
+	sk:専門教育
+	kk:工学基礎
+	ks:基礎専門
+	tm:地域マネ
+	se:専　　門
+	go:語　　学
+	ka:関連専門
+	ip:一　　般
 */
 function getData(grade,semester){
 	const data = 
@@ -15,12 +35,12 @@ function getData(grade,semester){
 					{
 						"name": "Ｃプログラミング基礎及び演習  　【田邉　造】",
 						"day": "月",
-						"time": 1,
-						"credit": 3,
-						"compulsory": 0,
-						"course": 1,
+						"time": "1",
+						"credit": "3",
+						"compulsory": "0",
+						"course": "1",
 						"division": "ks",
-						"multi": 1
+						"multi": "1"
 					},
 					{
 						"name": "ＯＳ＆コンピュータアーキテクチャ論  　【山田　哲靖】",

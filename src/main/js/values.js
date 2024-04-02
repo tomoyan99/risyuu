@@ -69,7 +69,7 @@ const tooltipDiv = document.querySelector("div.tooltip");
 const tooltipP = document.querySelector("div.tooltip p");
 
 // コース色　　,知能(1)=rgba(80,210,255,0.5),社会(2)=rgba(200,100,60,0.5)
-const course_color = ["#fff","rgba(80, 210, 255, 0.7)","rgba(200,100,60,0.7)"];
+const course_color = ["rgba(255, 248, 228, 0.9)","rgba(80, 210, 255, 0.7)","rgba(200,100,60,0.7)"];
 
 //必修カラー
 const compulsory_color = ["#000","rgba(220,30,60,0.9)"];

@@ -53,7 +53,7 @@ function findMulti(selected_option, data_sem) {
 	const multi_sub = data_sem.filter((data) => {
 		if (soa.name === data.name &&
 			soa.day === day_conv_day[data.day] &&
-			soa.time != data.time) {
+			soa.time !== data.time) {
 			return data;
 		}
 	});

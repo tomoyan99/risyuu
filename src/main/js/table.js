@@ -125,7 +125,7 @@ function createCalendar(data, sel) {
 			sel[key].forEach((cell1, index1) => {
 				//sel[key]は曜日列の各行。index1は[0]～[4]
 				let optArray = data.filter((data) => {
-					if (day_conv_day[data.day] === key && data.time === index1 + 1) { return data; }
+					if (day_conv_day[data.day] === key && parseInt(data.time) === index1 + 1){ return data; }
 				});//optArray_
 				//作成
 				optArray.forEach((data, index2) => {
@@ -145,22 +145,23 @@ function createOption(work_place,data,index) {
 	opt.attr = {
 		name : data.name, //name
 		day : day_conv_day[data.day], //day
-		time : data.time, //time
-		credit : data.credit, //credit
-		compulsory : data.compulsory, //compulsory(必修)
-		course : data.course, //course
+		time : parseInt(data.time), //time
+		credit : parseInt(data.credit), //credit
+		compulsory : parseInt(data.compulsory), //compulsory(必修)
+		course : parseInt(data.course), //course
 		division : data.division, // division(科目領域)
-		multi : data.multi, // 複講
+		multi : parseInt(data.multi), // 複講
 	};
 	opt.innerHTML = data.name; //本文
-	if (data.compulsory === 1) {
-		opt.style.backgroundColor = "rgba(220,30,60,0.9)";
-		opt.style.color = "#fff";
-	}
-	if (data.course !== 0) {
+	if (parseInt(data.course) !== 0) {
 		opt.style.backgroundColor = course_color[data.course];
 		opt.style.color = "rgba(0,0,0,1)";
 	}
+	if (parseInt(data.compulsory) === 1) {
+		opt.style.backgroundColor = "rgba(220,30,60,0.9)";
+		opt.style.color = "#fff";
+	}
+
 	work_place.appendChild(opt); //子要素としてselectの下につくる
 }
 

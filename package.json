@@ -1,0 +1,38 @@
+{
+  "name": "risyuu",
+  "version": "4.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start:electron": "electron ."
+  },
+  "homepage": "./src",
+  "build": {
+    "productName": "SUS_Login",
+    "appId": "com.electron.SUS_Login",
+    "directories": {
+      "output": "build/"
+    },
+    "compression": "maximum",
+    "files": [
+      "src/boot/**/*",
+      "package.json"
+    ],
+    "extraResources": [
+      "EXE/*"
+    ],
+    "win": {
+      "icon": "src/assets/icon.ico",
+      "target": "nsis"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "deleteAppDataOnUninstall": true
+    }
+  },
+  "dependencies": {
+    "electron": "^29.2.0",
+    "electron-squirrel-startup": "^1.0.0"
+  }
+}

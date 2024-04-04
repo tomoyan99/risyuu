@@ -10,16 +10,15 @@
 	・複講から単講に変更した際、変更前と同じ日、同じ名前、違う時限でmultiが1のoptionを選択から外す（value==defaultをtrueに）
 	・今何を選択しているかをselectやtdのattrに、前に何を選択していたかをtdのreattrに格納
 */
-
-window.addEventListener("load", () => {
-	/* selectを変えたときの処理 */
-
-	["bf", "af"].forEach((key) => {
-		selectSubject(sel_sem[key], key);
+{
+	window.addEventListener("load", () => {
+		/* selectを変えたときの処理 */
+		["bf", "af"].forEach((key) => {
+			selectSubject(sel_sem[key], key);
+		});
 	});
 
-
-});
+}
 
 
 //dataから選択されているoptionの名前と同じ名前かつ同じ曜日の奴を抽出

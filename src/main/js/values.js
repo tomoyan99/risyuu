@@ -1,7 +1,6 @@
 "use strict";
 
 /* グローバル変数の寄せ集め */
-
 const grade = document.querySelector("#grade_text"); // 学年ボックス
 let data_sem = {
 	bf: getData(grade.value, "bf"), //前期科目データを設定（gradeをいじったときに変更されるようlet）
@@ -9,9 +8,9 @@ let data_sem = {
 }; 
 
 //月～金表記を0～5表記に変える配列
-const day_conv_num = { 月: 0, 火: 1, 水: 2, 木: 3, 金: 4, 土: 5 };
+const day_conv_num = { "月": 0, "火": 1, "水": 2, "木": 3, "金": 4, "土": 5 };
 //月～金表記をmon～fri表記に変える配列
-const day_conv_day = { 月: "mon", 火: "tue", 水: "wed", 木: "thr", 金: "fri", 土: "sat" };
+const day_conv_day = { "月": "mon", "火": "tue", "水": "wed", "木": "thr", "金": "fri", "土": "sat" };
 
 //学期で分かれた特定の曜日の全時限のselect要素ノード
 const sel_sem = {
@@ -69,20 +68,24 @@ const tooltipDiv = document.querySelector("div.tooltip");
 const tooltipP = document.querySelector("div.tooltip p");
 
 // コース色　　,知能(1)=rgba(80,210,255,0.5),社会(2)=rgba(200,100,60,0.5)
-const course_color = ["rgba(255, 248, 228, 0.9)","rgba(80, 210, 255, 0.7)","rgba(200,100,60,0.7)"];
+const course_color = {
+	"なし":"rgba(255, 248, 228, 0.9)",
+	"知能":"rgba(80, 210, 255, 0.7)",
+	"社会":"rgba(200,100,60,0.7)"
+};
 
 //必修カラー
 const compulsory_color = ["#000","rgba(220,30,60,0.9)"];
 
 //領域科目
 const ryouiki = {
-	kk: document.querySelector("td#kk span"),
-	ks: document.querySelector("td#ks span"),
-	tm: document.querySelector("td#tm span"),
-	se: document.querySelector("td#se span"),
-	go: document.querySelector("td#go span"),
-	ka: document.querySelector("td#ka span"),
-	ip: document.querySelector("td#ip span"),
+	"工学基礎": document.querySelector("td#工学基礎 span"),
+	"基礎専門": document.querySelector("td#基礎専門 span"),
+	"マネ地域": document.querySelector("td#マネ地域 span"),
+	"専門": document.querySelector("td#専門 span"),
+	"語学": document.querySelector("td#語学 span"),
+	"関連専門": document.querySelector("td#関連専門 span"),
+	"一般": document.querySelector("td#一般 span"),
 }
 
 //領域科目和

@@ -97,7 +97,7 @@ input.menu:not(.menu2):hover{
 	background-color: #303030;
 	animation: fadeColor_menu2 0.3s forwards;
 }
-input.menu2:hover { 
+input.menu2:hover {
 	animation: fadeColor_menu2 0.3s forwards;
 }
 input.menu2 {
@@ -125,7 +125,7 @@ div.camera {
 	font-weight: bold;
 	color: #fff;
 	text-shadow: var(--text-shadow);
-	
+
 }
 
 div.camera input#screenshot {
@@ -345,6 +345,24 @@ div.tooltip p {
 
 .closeTable {
 	animation: fadeOut 0.2s;
+}
+
+.course_知能{
+	/*background: linear-gradient(135deg, rgba(41, 214, 255, 0.65) 50%, transparent 0%);*/
+	background-color: rgba(41, 214, 255, 0.65);
+	color: #2d2d2d;
+}
+.course_社会{
+	background: linear-gradient(315deg, rgba(255, 127, 75, 0.65) 50%, transparent 0%);
+	color: #2d2d2d;
+}
+.course_なし{
+	background-color: rgba(255, 248, 228, 0.9);
+	color: #2d2d2d;
+}
+.complusory{
+	background-color : rgba(220,30,60,0.9);
+	color:#fff;
 }
 
 @keyframes fadeIn {

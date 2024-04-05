@@ -11,18 +11,17 @@
 	・今何を選択しているかをselectやtdのattrに、前に何を選択していたかをtdのreattrに格納
 */
 {
-	window.addEventListener("load", () => {
-		/* selectを変えたときの処理 */
-		["bf", "af"].forEach((key) => {
-			selectSubject(sel_sem[key], key);
-		});
+	window.addEventListener("DOMContentLoaded",()=>{
+		const selects = document.querySelectorAll("div.calendar select");
+		selects.forEach((select)=>{
+			select.addEventListener("change",changeSelect);
+		})
 	});
-
 }
 
 
 //dataから選択されているoptionの名前と同じ名前かつ同じ曜日の奴を抽出
-function findOption(data, tr_select, day) {
+function findOption(data, tr_select, day9) {
 	const Index = tr_select.srcElement.selectedIndex; //今選択されているoptionが上から何番目かのindex
 	const Name = tr_select.target[Index].innerText; //今選択されているoptionの名前
 	let Array = data.filter((credit) => {
@@ -117,7 +116,9 @@ function removeMulti(multi_sub, ab) {
 	});
 }
 
-function selectSubject(select_semester, semester) {
+function changeSelect(event) {
+	const changed_select = event.target;
+
 	for (const key in select_semester) {
 		select_semester[key].forEach((select) => {
 			//全てのselectについてEventListenerが反応するようにする処理

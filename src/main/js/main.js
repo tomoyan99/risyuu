@@ -102,7 +102,6 @@ function createOption(data) {
 			const option_ID = createID(term,data.day,time,"o",option_index);
 			const option = document.createElement("option");
 			option.id = option_ID;//idの設定
-			option.className = "opt"; //classの設定
 
 			// 各optionにデータをattr属性として保存
 			option.attr = {
@@ -127,22 +126,14 @@ function createOption(data) {
 			}
 			// optionに表示される名称
 			option.innerText = `${data.name}${teacherListTxt(data.teacher)}`;
-
-			// コース色　　,知能(1)=rgba(80,210,255,0.5),社会(2)=rgba(200,100,60,0.5)
-			const course_color = {
-				"なし":"rgba(255, 248, 228, 0.9)",
-				"知能":"rgba(80, 210, 255, 0.7)",
-				"社会":"rgba(200,100,60,0.7)"
-			};
-			// コース科目なら背景をコース色、文字黒に
-			if (data.course !== "なし") {
-				option.style.backgroundColor = course_color[data.course];
-				option.style.color = "rgba(0,0,0,1)";
-			}
-			// 必修なら背景赤、文字白に
-			if (data.compulsory) {
-				option.style.backgroundColor = "rgba(220,30,60,0.9)";
-				option.style.color = "#fff";
+			if (data.compulsory){
+				// 必修だったら
+				// 必修色をクラスを追加することで設定
+				option.classList.add("compulsory");
+			}else{
+				// 必修じゃないなら
+				// コース色をクラスを追加することで設定
+				option.classList.add(...data.course.map((c)=>`course_${c}`));
 			}
 			select.appendChild(option); //子要素としてselectの下につくる
 		});
@@ -197,8 +188,8 @@ function setDefaultAttr() {
 			day			: e.closest("select").name, //day
 			time		: e.closest("tr").childNodes[1].innerText, //time
 			credit		: 0, //credit
-			isCompulsory: 0, //compulsory(必修)
-			course		: 0, //course
+			isCompulsory: false, //compulsory(必修)
+			course		: ["なし"], //course
 			division	: "一般", // division(科目領域)
 			multi		: 0, // 複講
 		}

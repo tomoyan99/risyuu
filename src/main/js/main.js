@@ -11,7 +11,7 @@
 ・スクロール禁止の設定
 */
 //月～金表記をmon～fri表記に変える配列
-
+const day_conv_day = { "月": "mon", "火": "tue", "水": "wed", "木": "thr", "金": "fri", "土": "sat" };
 {
 	window.addEventListener("DOMContentLoaded",()=>{
 		const btn_bf = document.querySelector("input[name=before]");//前期ボタン
@@ -52,8 +52,8 @@
 		btn_bf.addEventListener("click",clickTermBtn);
 		btn_af.addEventListener("click",clickTermBtn);
 
-		/* default_optionの初期化（attrの設定） */
-		setDefaultAttr();
+		/* default_option作成（attrの設定） */
+		createDefaultOptions();
 
 		/* optionを作る */
 		createCalendar(data);
@@ -92,14 +92,15 @@ function createOption(data) {
 			if (time === "集中講義"){
 				return;
 			}
+			const newDay = day_conv_day[data.day];
 			//　ターム・時限によってデータに対応したIDを生成し、select要素を取得
-			const select_ID = createID(term,data.day,time,"s",0);
+			const select_ID = createID(term,"s",newDay,time,0);
 			const select = document.querySelector(`select#${select_ID}`);
 
 			// selectにくっついてるoptionの数によってindexを生成
-			const option_index = select.length;
+			const option_index = select.options.length;
 			// select同様にIDを生成し、生成したoption要素に紐づけ
-			const option_ID = createID(term,data.day,time,"o",option_index);
+			const option_ID = createID(term,"o",newDay,time,option_index);
 			const option = document.createElement("option");
 			option.id = option_ID;//idの設定
 
@@ -111,10 +112,10 @@ function createOption(data) {
 				time 	: data.time, 			　//時限
 				credit 	: data.credit, 			　//単位
 				grade 	: data.compulsory, 		　//学年
-				isCompulsory : data.compulsory, 　//必修
+				isCompulsory : data.isCompulsory, 　//必修
 				division: data.division, 		　//科目領域
 				course 	: data.course, 			　//コース
-				multi 	: (data.time>1)?1:0 	　//複講
+				multi 	: (data.time.length>1)?1:0 	　//複講
 			};
 			// 教授名の処理。複数人いる場合は最初の人のみ表示し、あとは"..."にする
 			const teacherListTxt = (arr)=>{
@@ -126,72 +127,54 @@ function createOption(data) {
 			}
 			// optionに表示される名称
 			option.innerText = `${data.name}${teacherListTxt(data.teacher)}`;
-			if (data.compulsory){
+			if (data.isCompulsory){
 				// 必修だったら
 				// 必修色をクラスを追加することで設定
 				option.classList.add("compulsory");
 			}else{
 				// 必修じゃないなら
 				// コース色をクラスを追加することで設定
-				option.classList.add(...data.course.map((c)=>`course_${c}`));
+				const course_class =`course_${data.course.join("")}`;
+				option.classList.add(course_class);
 			}
 			select.appendChild(option); //子要素としてselectの下につくる
 		});
 	});
 }
-const day_conv_day = { "月": "mon", "火": "tue", "水": "wed", "木": "thr", "金": "fri", "土": "sat" };
 
 // term,dayなどからIDを生成
-function createID(term,day,time,selector,index=0) {
-	return `${term}_${day_conv_day[day]}_${selector}_${time}_${index}`;
+function createID(term,selector,day,time,index=0) {
+	return `${term}_${selector}_${day}_${time}_${index}`;
 }
 // IDからterm,dayなどをパース
 function parseID(ID) {
 	const params = ID.split("_");
-	return {element:params[0],day:params[1],selector:params[2],time:params[3],index:params[4]};
-}
-
-
-//optionを削除
-function deleteCalender() {
-	const select = document.querySelectorAll("div.calendar select");
-	select.forEach((element)=>{
-		element.innerHTML = `<option value="default" style="text-align:center;">― ― ― ― ― ―</option>`;
-		if (element.attr){
-			delete element.attr;
-		}
-		if (element.reattr){
-			delete element.reattr;
-		}
-		element.selectedIndex = 0;
-	});
-
-	//年間単位数合計のスタイル
-	const styleDiv = document.querySelector("div#sum_all_div").style;
-	styleDiv.backgroundColor = "";
-	const td_credit_all = document.querySelectorAll("tr.credit td,.ryouiki");
-	td_credit_all.forEach((td)=>{
-		delete td.attr;
-		delete td.reattr;
-		td.style.color = "";
-		td.innerText = "0";
-	});
+	return {term:params[0],selector:params[1],day:params[2],time:params[3],index:params[4]};
 }
 
 //defaultの初期設定
-function setDefaultAttr() {
-	const def = document.querySelectorAll("option[value=default]");
-	def.forEach((e)=>{
-		e.attr ={
-			name		:"default", //name
-			teacher		:[],
-			day			: e.closest("select").name, //day
-			time		: e.closest("tr").childNodes[1].innerText, //time
-			credit		: 0, //credit
-			isCompulsory: false, //compulsory(必修)
-			course		: ["なし"], //course
-			division	: "一般", // division(科目領域)
-			multi		: 0, // 複講
+function createDefaultOptions() {
+	const selects = document.querySelectorAll("div.calendar select");
+	selects.forEach((select)=>{
+		const default_option = document.createElement("option");
+		const select_loc = parseID(select.id);
+		default_option.id = createID(select_loc.term,"o",select_loc.day,select_loc.time,0);
+		default_option.value = "default";
+		default_option.style.textAlign = "center";
+		default_option.innerText = "― ― ― ― ― ―";
+		default_option.attr ={
+			name		: "default",
+			teacher		: [""],
+			day			: parseID(select.id).day,
+			time		: [parseID(select.id).time],
+			credit		: 0,
+			isCompulsory: false,
+			course		: ["なし"],
+			division	: "一般",
+			multi		: 0,
 		}
+		select.attr = structuredClone(default_option.attr);
+		select.preattr = {};
+		select.appendChild(default_option);
 	});
 }

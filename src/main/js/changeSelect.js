@@ -14,182 +14,127 @@
 	window.addEventListener("DOMContentLoaded",()=>{
 		const selects = document.querySelectorAll("div.calendar select");
 		selects.forEach((select)=>{
-			select.addEventListener("change",changeSelect);
-		})
+			select.addEventListener("change",selectChange);
+		});
 	});
 }
 
+function changeCredit(target,credit_cur) {
+	// 変更したselectのattr,preattr
+	const target_attr = target.attr;
+	const target_preattr = target.preattr;
+	// selectのIDからパースした座標パラメータ
+	const target_location = parseID(target.id);
+	// selectの座標パラメータをcredit_tdのパラメータに書き換え
+	const credit_td_location = Object.assign({},target_location);
+	credit_td_location.selector = "c";
+	// credit_tdのパラメータを下にcredit_tdのIDを作成
+	const credit_td_id = createID(credit_td_location.term,credit_td_location.selector,credit_td_location.day,credit_td_location.time,credit_td_location.index);
+	// IDからcredit_tdを検索
+	const credit_td = document.querySelector(`#${credit_td_id}`);
+	// いま選択したtargetのdivisionと、これまで選択していたdivisionの要素を取得
+	const division_target = document.querySelector(`#${target_attr.division} span`);
+	const division_pretarget = document.querySelector(`#${target_preattr.division} span`);
+	// 今まで選択してた科目の単位
+	const credit_pre = parseInt(credit_td.innerText);
+	// select下のcredit_tdに選択した科目の単位数を記述
+	credit_td.innerText = `${credit_cur}`;
 
-//dataから選択されているoptionの名前と同じ名前かつ同じ曜日の奴を抽出
-function findOption(data, tr_select, day9) {
-	const Index = tr_select.srcElement.selectedIndex; //今選択されているoptionが上から何番目かのindex
-	const Name = tr_select.target[Index].innerText; //今選択されているoptionの名前
-	let Array = data.filter((credit) => {
-		//dataから選択されているoptionの名前と同じ名前かつ同じ曜日の奴を抽出
-		if (credit.name == Name && day_conv_day[credit.day] == day) {
-			return credit;
-		}
-	});
-	return Array;
+	// 選択したのが必修ならtdの文字色を赤に
+	if (target_attr.isCompulsory){
+		credit_td.style.color = "#f00"
+	}else{
+		credit_td.style.color = "#000"
+	}
+
+	// 今選択した科目のdivisionに単位を加算
+	division_target.innerText = `${parseInt(division_target.innerText)+credit_cur}`;
+	// これまで選択していた科目のdivisionからは単位を減算
+	division_pretarget.innerText = `${parseInt(division_pretarget.innerText)-credit_pre}`;
+
+	// selectが変更されたタームのカレンダーの全credit_td
+	const credit_in_term = document.querySelectorAll(`div#${target_location.term} tr.credit td`);
+	// タームごとの単位合計のtd
+	const credit_sum_term = document.querySelector(`#${target_location.term}_creditSum`);
+	// タームごとの合計を計算
+	credit_sum_term.innerText = `${[...credit_in_term].reduce((p,c)=>p+parseInt(c.innerText),0)}`;
+	const sum_all = document.querySelector("#sum_all_span");
+	const sum_sem = document.querySelectorAll("td.sum_sem");
+	sum_all.innerText = `${[...sum_sem].reduce((p,c)=>p+parseInt(c.innerText),0)}`;
 }
+function generateDataObject(main_select,ms_attr) {
+	const ms_location = parseID(main_select.id);
+	const sub_select_times = ms_attr.time.filter((t)=>t !== ms_location.time);
+	const sub_select_IDs = sub_select_times.map((sst)=>createID(ms_location.term,ms_location.selector,ms_location.day,sst));
 
-// セレクトされてるoption要素を返す
-//入力はselectノード
-function isselectedTrue(e_select) {
-	let selected_option = Object.values(e_select).filter((option) => {
-		if (option.selected === true) {
-			return option;
-		}
+	const selectIDs = [main_select.id,...sub_select_IDs];
+	const select_nodes = selectIDs.map((id)=>document.querySelector(`#${id}`));
+
+	const creditIDs = selectIDs.map((id)=>{
+		const location = parseID(id);
+		location.selector = "c";
+		return createID(location.term,location.selector,location.day,location.time);
 	});
-	return selected_option;
-}
+	const credit_nodes = creditIDs.map((id)=>document.querySelector(`#${id}`));
 
-//複講を検索
-function findMulti(selected_option, data_sem) {
-	const soa = selected_option.attr;
-	//今選択したのとは別の時間のやつ
-	const multi_sub = data_sem.filter((data) => {
-		if (soa.name === data.name &&
-			soa.day === day_conv_day[data.day] &&
-			soa.time !== data.time) {
-			return data;
-		}
+	const optionIDs = select_nodes.map((s)=>{
+		const options = [...s.options];
+		const option_index = options.findIndex((d)=>{
+			const isSameName = d.attr.name === ms_attr.name;
+			const isSameTeachers = d.attr.teacher.every((t,i)=>t === ms_attr.teacher[i]);
+			return isSameName&&isSameTeachers;
+		});
+		const s_loc = parseID(s.id);
+		return createID(s_loc.term,"o",s_loc.day,s_loc.time,option_index);
+	})
+	const option_nodes = optionIDs.map((id)=>document.querySelector(`#${id}`));
+	const option_indexes = option_nodes.map((option)=>option.index);
+	const credit_nums = option_nodes.map((o,i)=>{
+		return (i===0)?o.attr.credit:0;
 	});
-	return multi_sub;
+	return {
+		selectIDs	:selectIDs,
+		optionIDs	:optionIDs,
+		creditIDs	:creditIDs,
+		select_nodes:select_nodes,
+		option_nodes:option_nodes,
+		credit_nodes:credit_nodes,
+		option_indexes:option_indexes,
+		credit_nums :credit_nums,
+	};
+
 }
-
-//複講をセット
-function setMulti(multi_sub, ab) {
-	//multi_subは検索したマルチoption
-	//multi_subの要素数だけ設定
-	multi_sub.forEach((multi_attr) => {
-		const want_to_change_sel = document.querySelector("#" + ab + "_" + day_conv_day[multi_attr.day] + multi_attr.time); //変えたいselect要素
-		const want_to_change_td = document.querySelector("#" + ab + "_" + day_conv_day[multi_attr.day] + "_c" + multi_attr.time); //変えたいtd要素
-
-		const want_to_change_opt = Object.values(want_to_change_sel).filter((opt) => {
-			//attrが存在して、attr.nameがmulti_subのnameと同じoption要素を検索（変えたいselectから）
-			if (opt.attr !== undefined && opt.attr.name === multi_attr.name) {
-				return opt;
-			}
-		})[0]; //変えたいoption要素
-
-		want_to_change_opt.selected = true; //optionを設定
-
-		//reattrの設定
-		if (want_to_change_sel.attr === undefined) {
-			//初手複講を選択したとき
-			want_to_change_td.reattr = want_to_change_sel[0].attr;//td.reattrはdefault.attrに初期化
-		} else if (want_to_change_sel.attr !== undefined) {
-			//二回目以降、何かから何かへ複講を選択した時
-			want_to_change_td.reattr = want_to_change_sel.attr;//td.reattrは前に選択されていたoptionのattrに変更
-		}
-
-		want_to_change_sel.attr = JSON.parse(JSON.stringify(multi_attr)); //変えたいselectのattrに今選択されたoptionのattrをdeepコピー
-		want_to_change_sel.attr.day = JSON.parse(JSON.stringify(day_conv_day[multi_attr.day])); //selectのattrにdayをコピー
-		want_to_change_sel.style.backgroundColor = course_color[want_to_change_opt.attr.course]; //コースによって背景色を変更
-		want_to_change_sel.style.color = compulsory_color[want_to_change_opt.attr.compulsory];//必修なら赤文字に
-		want_to_change_td.innerHTML = multi_attr.credit; //tdに単位を設定
-		want_to_change_td.attr = multi_attr; //tdに単位を設定
-		want_to_change_td.style.color = "#ff4444"; //文字色を赤に
-
+function updateSelectAttr(select) {
+	const select_target = select;
+	const selected_option = select_target.selectedOptions[0];
+	select_target.preattr = structuredClone(select_target.attr);
+	select_target.attr = structuredClone(selected_option.attr);
+}
+function selectChange(event) {
+	const main_select = event.target;
+	const ms_index = main_select.selectedIndex;
+	const ms_option = main_select.selectedOptions[0];
+	const isSameName = main_select.attr.name === ms_option.attr.name;
+	const isSameTeacher = main_select.attr.name === ms_option.attr.name;
+	if (ms_option.attr.time.length === 1){
+		const ms_attr = main_select.attr;
+		const preData = generateDataObject(main_select,ms_attr);
+		preData.select_nodes.forEach((select,i)=>{
+			select.selectedIndex = 0;
+			select.className = "";
+			updateSelectAttr(select);
+			changeCredit(select,preData.credit_nums[i]);
+		});
+	}
+	const ms_attr = ms_option.attr;
+	const curData = generateDataObject(main_select,ms_attr);
+	console.log(curData)
+	curData.select_nodes.forEach((select,i)=>{
+		select.selectedIndex = curData.option_indexes[i];
+		select.className = ms_option.classList;
+		updateSelectAttr(select);
+		changeCredit(select,curData.credit_nums[i]);
 	});
-}
-
-//複講を解除
-function removeMulti(multi_sub, ab) {
-	//multi_subの要素数だけ設定
-	multi_sub.forEach((element) => {
-		const want_to_change_sel = document.querySelector("#" + ab + "_" + day_conv_day[element.day] + element.time); //変えたいselect要素
-		const want_to_change_td = document.querySelector("#" + ab + "_" + day_conv_day[element.day] + "_c" + element.time); //変えたいtd要素
-
-		want_to_change_td.reattr = want_to_change_sel.attr;//td.reattrは前に選択されていたoptionのattrに
-		want_to_change_sel[0].selected = true; //optionはdefaultに設定
-
-		want_to_change_td.attr = want_to_change_sel[0].attr; //td.attrはdefault.attrに（td.attrの初期化）
-		want_to_change_sel.attr = want_to_change_sel[0].attr; //select.attrはdefault.attrに（td.attrの初期化）
-
-		want_to_change_sel.style.backgroundColor = ""; //背景色をデフォルト（白）に設定
-		want_to_change_sel.style.color = ""; //文字色をデフォルト（黒）に設定
-
-		want_to_change_td.innerHTML = 0; //tdに単位数０を設定
-		want_to_change_td.style.color = "#000"; //文字色を黒に
-	});
-}
-
-function changeSelect(event) {
-	const changed_select = event.target;
-
-	for (const key in select_semester) {
-		select_semester[key].forEach((select) => {
-			//全てのselectについてEventListenerが反応するようにする処理
-			select.addEventListener("change", (target) => {
-
-				let td_credits = document.querySelectorAll("div#semester_" + semester + " tr.credit td[name=" + key + "]"); //前後期のセレクトされた曜日の全時限td_creditノード
-				let selected_opt = isselectedTrue(target.target)[0]; //選択したoptionノードを取得
-				const srcSelect = target.target; //select要素
-				srcSelect.style.backgroundColor = "#fff"; //背景色をデフォルト（白）に変更
-				/* 直下のtdに単位数を入力 */
-				td_credits[selected_opt.attr.time - 1].style.color = "#000"; //tdの文字色をデフォルトの黒に
-				srcSelect.style.backgroundColor = course_color[selected_opt.attr.course]; //コースによって背景色を変更
-				srcSelect.style.color = compulsory_color[selected_opt.attr.compulsory]; //必修だったら文字色を赤に
-
-				td_credits[selected_opt.attr.time - 1].innerHTML = JSON.parse(JSON.stringify(selected_opt.attr.credit)); //tdのinnerHTMLをselected_optのcreditに書き換え(mo反応)
-				td_credits[selected_opt.attr.time - 1].style.color = "#ff4444"; //tdの文字色を赤に
-
-				/* 複講を自動選択 */
-				//srcSelect.attrが存在しない == 初回変更の場合
-				if (srcSelect.attr === undefined) {
-
-					td_credits[selected_opt.attr.time - 1].attr = JSON.parse(JSON.stringify(selected_opt.attr)); //td.attrにoptionのattrをコピー
-					td_credits[selected_opt.attr.time - 1].reattr = JSON.parse(JSON.stringify(Object.values(srcSelect)[0].attr)); //td.reattrにdefaultのattrをコピー(reattrの初期化)
-
-					if (selected_opt.attr.multi === 1) {
-						//選択したoptionが複講だったとき
-						const multi_sub = findMulti(selected_opt, data_sem[semester]); //選択されてない時限のノードを配列で複講
-						setMulti(multi_sub, semester); //選択されてない複講をリセット
-					}
-
-				} else if (srcSelect.attr) {
-
-					//二回目以降の選択
-					td_credits[selected_opt.attr.time - 1].attr = JSON.parse(JSON.stringify(selected_opt.attr)); //td.attrにoptionのattrをコピー
-					td_credits[selected_opt.attr.time - 1].reattr = JSON.parse(JSON.stringify(srcSelect.attr)); //td.reattrにselectのattrをコピー(reattrの初期化)
-
-					if (srcSelect.attr.multi === 1) {
-						//前に選択されていたのが複講だったとき
-						//一回全部リセット
-						const multi_sub = findMulti(srcSelect, data_sem[semester]); //選択されてない時限の複講を探してノードを配列で返却
-						removeMulti(multi_sub, semester); //選択されてない複講をリセット
-
-						if (selected_opt.attr.multi === 1) {
-							//今選択されたのが複講の時
-							const multi_sub = findMulti(selected_opt, data_sem[semester]); //選択されてない時限のノードを配列で複講
-							setMulti(multi_sub, semester); //選択されてない複講をリセット
-						} else if (selected_opt.attr.multi === 0) {
-							//今選択されたのが単講の時
-							if (selected_opt.attr.name === "default") {
-								//defaultに戻したのなら
-								td_credits[selected_opt.attr.time - 1].style.color = "#000"; //文字色を黒に
-							}
-						}
-					} else if (srcSelect.attr.multi === 0) {
-						//前に選択されていたのが単講
-
-						if (selected_opt.attr.multi === 1) {
-							//今選択されたのが複講の時
-							const multi_sub = findMulti(selected_opt, data_sem[semester]); //選択されてない時限のノードを配列で複講
-							setMulti(multi_sub, semester); //選択されてない複講をリセット
-						} else if (selected_opt.attr.multi === 0) {
-							//今選択されたのが単講の時
-							if (selected_opt.attr.name === "default") {
-								td_credits[selected_opt.attr.time - 1].style.color = "#000"; //文字色を黒に
-							}
-						}//if (selected_opt.attr.multi == 1)
-					}//if (srcSelect.attr.multi == 1)
-				}//if(srcSelect.attr == undefined )
-				srcSelect.attr = JSON.parse(JSON.stringify(selected_opt.attr));//selectに今選択したoptionのattrをディープコピー
-			});//eventListener
-		});//foreach
-	}//for in
-
+	const sum_all_div = document.querySelector("#sum_all_div");
+	sum_all_div.dispatchEvent(new Event("creditWarning"));
 }

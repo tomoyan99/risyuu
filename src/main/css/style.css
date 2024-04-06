@@ -296,8 +296,8 @@ div.calendar td select {
 }
 
 div.calendar td select option {
-	color: #464646;
-	background-color: rgba(255, 248, 228, 0.9);
+	background-color: rgba(255, 240, 198, 0.9);
+	color: #1e1e1e;
 	font-weight: 600;
 }
 div#後期{
@@ -348,21 +348,30 @@ div.tooltip p {
 }
 
 .course_知能{
-	/*background: linear-gradient(135deg, rgba(41, 214, 255, 0.65) 50%, transparent 0%);*/
-	background-color: rgba(41, 214, 255, 0.65);
-	color: #2d2d2d;
+	background-color:rgba(41, 214, 255, 0.65)!important;
+	color: #1e1e1e;
 }
 .course_社会{
-	background: linear-gradient(315deg, rgba(255, 127, 75, 0.65) 50%, transparent 0%);
-	color: #2d2d2d;
+	background-color:rgba(255, 127, 75, 0.65)!important;
+	color: #1e1e1e;
+}
+select.course_知能社会{
+	background-image:
+			linear-gradient(135deg, rgba(41, 214, 255, 0.65) 50%, transparent 0%),
+			linear-gradient(315deg, rgba(255, 127, 75, 0.65) 50%, transparent 0%) !important;
+	color: #1e1e1e;
+}
+option.course_知能社会{
+	animation: changeColor 2s linear infinite alternate!important;
+	color: #1e1e1e;
 }
 .course_なし{
-	background-color: rgba(255, 248, 228, 0.9);
-	color: #2d2d2d;
+	background-color: rgba(255, 240, 198, 0.9);
+	color: #1e1e1e;
 }
-.complusory{
-	background-color : rgba(220,30,60,0.9);
-	color:#fff;
+.compulsory{
+	background-color : rgba(220,30,60,0.9)!important;
+	color:#fff!important;;
 }
 
 @keyframes fadeIn {
@@ -395,4 +404,8 @@ div.tooltip p {
 @keyframes fadeColor_menu2{
 	0%{color: #fff;}
 	100%{color: #1a969f;}
+}
+@keyframes changeColor {
+	0%{background-color: rgba(41, 214, 255, 0.65)}
+	100%{background-color:rgba(255, 127, 75, 0.65)}
 }

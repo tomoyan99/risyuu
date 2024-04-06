@@ -11,3 +11,25 @@
 		createCalendar(data);
 	});
 }
+//optionを削除
+function deleteCalender() {
+	const select = document.querySelectorAll("div.calendar select");
+	select.forEach((element)=>{
+		// selectに適用されてるすべてのクラスを削除
+		element.className = "";
+		// 子要素（option要素）を全て削除
+		while (element.firstChild) {
+			element.removeChild(element.firstChild);
+		}
+	});
+	// defaultのoptionを作成
+	createDefaultOptions();
+	//年間単位数合計のスタイル
+	const sum_all_div = document.querySelector("div#sum_all_div");
+	sum_all_div.style.backgroundColor = "";
+	const td_credit_all = document.querySelectorAll("tr.credit td,.ryouiki,td.sum_sem,#sum_all_span");
+	td_credit_all.forEach((td)=>{
+		td.style.color = "";
+		td.innerText = "0";
+	});
+}

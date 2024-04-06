@@ -144,12 +144,3 @@
 	mo.observe(sumAllspan, config);//監視の開始
 }
 
-//マウスオーバーでツールチップを出す関数
-function displayTooltip() {
-	sumAlldiv.addEventListener("mouseover", () => {
-		tooltipDiv.style.display = "block";
-	});
-	sumAlldiv.addEventListener("mouseout", () => {
-		tooltipDiv.style.display = "none";
-	});
-}

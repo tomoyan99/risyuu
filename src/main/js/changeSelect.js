@@ -91,7 +91,7 @@ function generateDataObject(main_select,ms_attr) {
 	const option_indexes = option_nodes.map((option)=>option.index);
 	const credit_nums = option_nodes.map((o,i)=>{
 		return (i===0)?o.attr.credit:0;
-	});
+	}).sort((a,b)=>(a>b)?-1:1);
 	return {
 		selectIDs	:selectIDs,
 		optionIDs	:optionIDs,
@@ -128,7 +128,6 @@ function selectChange(event) {
 	}
 	const ms_attr = ms_option.attr;
 	const curData = generateDataObject(main_select,ms_attr);
-	console.log(curData)
 	curData.select_nodes.forEach((select,i)=>{
 		select.selectedIndex = curData.option_indexes[i];
 		select.className = ms_option.classList;

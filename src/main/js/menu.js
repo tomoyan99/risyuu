@@ -46,12 +46,12 @@ window.addEventListener("DOMContentLoaded",()=>{
         div_union.style.display = "flex";
         div_calendar.style.display = "grid";
         div_points.style.display = "grid";
-        div_calendar.querySelector("div#semester_bf").style.display = "block";
-        div_calendar.querySelector("div#semester_bf").style.opacity = 1;
-        div_calendar.querySelector("div#semester_bf").classList.remove("showTable");
-        div_calendar.querySelector("div#semester_af").style.display = "block";
-        div_calendar.querySelector("div#semester_af").style.opacity = 1;
-        div_calendar.querySelector("div#semester_af").classList.remove("showTable");
+        div_calendar.querySelector("div#前期").style.display = "block";
+        div_calendar.querySelector("div#前期").style.opacity = 1;
+        div_calendar.querySelector("div#前期").classList.remove("showTable");
+        div_calendar.querySelector("div#後期").style.display = "block";
+        div_calendar.querySelector("div#後期").style.opacity = 1;
+        div_calendar.querySelector("div#後期").classList.remove("showTable");
         div_points_area.querySelector("table").style.cssText = "border:1.5px solid #000,border-collapse:collapse";
         div_points_area.querySelectorAll("th").forEach(element => {
             element.style.border = "1.5px solid #000";

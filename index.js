@@ -3,21 +3,18 @@ const path = require('path');
 
 const fs = require("fs");
 
-if (require('electron-squirrel-startup')) {
-  app.quit();
-}
 let mainWindow;
 const createWindow = async() => {
   // Create the browser window.
   mainWindow = new BrowserWindow({
     width: 800,
     height: 600,
-    // autoHideMenuBar:true,
+    autoHideMenuBar:true,
     minWidth :300,
     minHeight:300,
     useContentSize:true,
     webPreferences: {
-      devTools:true,
+      devTools:false,
       nodeIntegration:true,
     },
   });
@@ -42,5 +39,5 @@ const mainMenu = [
   {label: 'DevTool', role:"toggleDevTools"},
 ];
 
-const menu = Menu.buildFromTemplate(mainMenu);
+const menu = Menu.buildFromTemplate([]);
 Menu.setApplicationMenu(menu);
